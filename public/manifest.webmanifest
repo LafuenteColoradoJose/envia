@@ -1,6 +1,6 @@
 {
-  "name": "app",
-  "short_name": "app",
+  "name": "EnVía",
+  "short_name": "EnVía",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
