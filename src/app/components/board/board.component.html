@@ -1,0 +1,45 @@
+<div class="board-header" style="padding: 16px; position: sticky; top: 0; background: var(--ion-background-color); z-index: 10;">
+  <ion-segment [value]="filterType" (ionChange)="segmentChanged($event)" color="primary" mode="ios">
+    <ion-segment-button value="salidas">
+      <ion-label>Salidas</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="llegadas">
+      <ion-label>Llegadas</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</div>
+
+<div class="board-content" style="padding: 0 16px 80px 16px;">
+  <ion-list lines="none" style="background: transparent;">
+    <ion-item *ngFor="let t of visibleTrains()" style="--background: transparent; --padding-start: 0; --inner-padding-end: 0;">
+      <ion-card style="width: 100%; margin: 8px 0; background: var(--ion-item-background); border-left: 5px solid var(--ion-color-primary); box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+        <ion-card-header>
+          <ion-card-subtitle style="color: var(--ion-color-secondary); font-weight: bold; letter-spacing: 1px;">
+            {{t.company | uppercase}} - TREN {{t.commercial_id?.[0]?.numbers?.[0] || '---'}}
+          </ion-card-subtitle>
+          <ion-card-title style="color: var(--ion-text-color); font-size: 1.5rem; font-weight: 800;">
+            <ng-container *ngIf="filterType === 'salidas'">
+              Cód. Destino: {{t.destinations?.[0]?.code || 'N/A'}}
+            </ng-container>
+            <ng-container *ngIf="filterType === 'llegadas'">
+              Cód. Origen: {{t.origins?.[0]?.code || 'N/A'}}
+            </ng-container>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content style="display: flex; justify-content: space-between; align-items: center; padding-top: 0;">
+          <h1 style="margin: 0; color: var(--ion-text-color); font-weight: 300; font-size: 2.5rem;">
+            {{ (filterType === 'salidas' ? t.departure_time : t.arrival_time) | date:'HH:mm' }}
+          </h1>
+          <div style="text-align: right;">
+            <div style="font-size: 1.4rem; font-weight: 900; color: var(--ion-color-primary)">
+              Vía {{t.platform || '-'}}
+            </div>
+            <div style="font-size: 0.95rem; font-weight: 600; color: var(--ion-color-tertiary); text-transform: uppercase;">
+              {{t.status}}
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-item>
+  </ion-list>
+</div>

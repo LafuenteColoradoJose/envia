@@ -1,0 +1,22 @@
+<div style="padding: 24px;">
+  <ion-list-header style="padding-left: 0; margin-bottom: 20px;">
+    <ion-label style="font-size: 1.8rem; font-weight: 800; color: var(--ion-text-color); letter-spacing: -0.5px;">Panel de Control</ion-label>
+  </ion-list-header>
+
+  <p style="color: var(--ion-color-secondary); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; margin-top: 30px;">Filtros de Operador</p>
+  <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+    <ion-chip *ngFor="let c of companies" color="primary" mode="ios" style="font-weight: 600; padding: 0 16px;">
+      <ion-label>{{c}}</ion-label>
+    </ion-chip>
+  </div>
+  
+  <p style="color: var(--ion-color-secondary); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; margin-top: 40px;">Apariencia</p>
+  <div style="display: flex; flex-direction: column; gap: 12px;">
+    <ion-chip color="tertiary" mode="ios" (click)="toggleTheme('dark')" style="justify-content: center; padding: 20px; font-weight: bold; font-size: 1.1rem; border-radius: 12px;">
+      <ion-label>Modo Oscuro</ion-label>
+    </ion-chip>
+    <ion-chip color="primary" mode="ios" (click)="toggleTheme('light')" style="justify-content: center; padding: 20px; font-weight: bold; font-size: 1.1rem; border-radius: 12px; --background: var(--ion-color-step-100, #f4f5f8);">
+      <ion-label>Modo Claro</ion-label>
+    </ion-chip>
+  </div>
+</div>

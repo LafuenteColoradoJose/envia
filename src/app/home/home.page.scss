@@ -1,27 +1,28 @@
-#container {
-  text-align: center;
-
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+.desktop-panel {
+  display: none;
+  border-right: 1px solid var(--ion-color-step-150, #e0e0e0);
+  background: var(--ion-background-color);
+  height: 100%;
+  overflow-y: auto;
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+.main-panel {
+  height: 100%;
+  overflow-y: auto;
+  background: var(--ion-background-color);
 }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
+// Media query para el layout de escritorio
+@media (min-width: 992px) {
+  .desktop-panel {
+    display: block; // Muestra el panel lateral en pantallas grandes
+  }
+  .mobile-fab {
+    display: none; // Oculta el FAB en escritorio
+  }
 }
 
-#container a {
-  text-decoration: none;
+// Para el modo oscuro, oscurecemos el borde separador
+:host-context([data-theme="dark"]) .desktop-panel {
+  border-right-color: #333333;
 }
