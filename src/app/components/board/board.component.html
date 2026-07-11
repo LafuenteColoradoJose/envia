@@ -3,7 +3,10 @@
   <div class="board-header">
     <div class="header-top">
       <div class="logo-box" (click)="toggleType()" style="cursor: pointer;" title="Cambiar a Salidas/Llegadas">
-        <div class="adif-logo">EnVía</div>
+        <div class="adif-logo">
+          <ion-icon name="train" style="margin-right: 4px; font-size: 1.1em;"></ion-icon>
+          EnVía
+        </div>
         <div class="title-container">
           <h1 class="type-title">
             {{ filterType() === 'salidas' ? 'Salidas' : 'Llegadas' }}
