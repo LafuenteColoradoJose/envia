@@ -2,38 +2,43 @@
 // https://ionicframework.com/docs/theming/
 
 :root[data-theme="light"], :root {
-  --text: #040605;
-  --background: #fcfdfc;
-  --primary: #e27303;
-  --secondary: #834202;
-  --accent: #3d1f01;
+  --text: #002d40;
+  --background: #f4f7f6;
+  --primary: #005a40;
+  --secondary: #004030;
+  --accent: #a3c4ab;
 
   --ion-background-color: var(--background);
   --ion-text-color: var(--text);
   --ion-color-primary: var(--primary);
+  --ion-color-primary-rgb: 0, 90, 64;
   --ion-color-secondary: var(--secondary);
   --ion-color-tertiary: var(--accent);
   
-  // Para las tarjetas y elementos elevados
   --ion-item-background: #ffffff;
   --ion-card-background: #ffffff;
+  --ion-color-step-50: #eaeef1;
+  --ion-color-medium: #8899a6;
 }
 
 :root[data-theme="dark"] {
-  --text: #f9fbfa;
-  --background: #020302;
-  --primary: #fc8c1d;
-  --secondary: #fdbd7c;
-  --accent: #fee0c3;
+  --text: #ffffff;
+  --background: #0b1421;
+  --primary: #a3c4ab;
+  --secondary: #d8eadc;
+  --accent: #005a40;
 
   --ion-background-color: var(--background);
   --ion-text-color: var(--text);
   --ion-color-primary: var(--primary);
+  --ion-color-primary-rgb: 163, 196, 171;
   --ion-color-secondary: var(--secondary);
   --ion-color-tertiary: var(--accent);
   
-  --ion-item-background: #111111;
-  --ion-card-background: #111111;
+  --ion-item-background: #111a2a;
+  --ion-card-background: #111a2a;
+  --ion-color-step-50: #1a2536;
+  --ion-color-medium: #6a82a0;
 }
 
 // Asegurar que el fondo general toma los colores

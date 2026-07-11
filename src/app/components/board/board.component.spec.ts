@@ -7,15 +7,20 @@ describe('BoardComponent', () => {
   let component: BoardComponent;
   let fixture: ComponentFixture<BoardComponent>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     const mockTrains = [
-      { traffic_type: 'L', company: 'Renfe' },
-      { traffic_type: 'R', company: 'Ouigo' },
-      { traffic_type: 'L', company: 'Iryo' }
+      { class_stop: 'origin', company: 'Renfe' },
+      { class_stop: 'destination', company: 'Ouigo' },
+      { class_stop: 'intermediate', company: 'Iryo' }
     ];
-    const adifSpy = { trains: signal(mockTrains) };
+    const adifSpy = {  
+      trains: signal(mockTrains), 
+      stationName: signal('Madrid'),
+      activeFilters: signal(['CERCANÍAS', 'AVE', 'AVANT', 'ALVIA', 'OUIGO', 'IRYO', 'INTERCITY', 'TRENHOTEL', 'REGIONAL', 'MD']),
+      stationDictionary: { '60000': 'Madrid Atocha' }
+    };
 
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [BoardComponent],
       providers: [{ provide: AdifService, useValue: adifSpy }]
     }).compileComponents();
@@ -23,15 +28,17 @@ describe('BoardComponent', () => {
     fixture = TestBed.createComponent(BoardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  }));
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should change segment', () => {
-    component.segmentChanged({ detail: { value: 'llegadas' } });
+  it('should toggle type', () => {
+    component.toggleType();
     expect(component.filterType()).toBe('llegadas');
+    component.toggleType();
+    expect(component.filterType()).toBe('salidas');
   });
 
   it('should filter trains for salidas', () => {
@@ -44,7 +51,7 @@ describe('BoardComponent', () => {
   it('should filter trains for llegadas', () => {
     component.filterType.set('llegadas');
     const trains = component.visibleTrains();
-    expect(trains.length).toBe(1);
+    expect(trains.length).toBe(2);
     expect(trains[0].company).toBe('Ouigo');
   });
 });

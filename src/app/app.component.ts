@@ -10,6 +10,7 @@ import { AdifService } from './services/adif.service';
 })
 export class AppComponent {
   constructor(private adif: AdifService) {
-    this.adif.startConnection();
+    const savedStation = localStorage.getItem('selectedStation') || '60000';
+    this.adif.startConnection(savedStation);
   }
 }

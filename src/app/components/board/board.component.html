@@ -1,45 +1,88 @@
-<div class="board-header" style="padding: 16px; position: sticky; top: 0; background: var(--ion-background-color); z-index: 10;">
-  <ion-segment [value]="filterType()" (ionChange)="segmentChanged($event)" color="primary" mode="ios">
-    <ion-segment-button value="salidas">
-      <ion-label>Salidas</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="llegadas">
-      <ion-label>Llegadas</ion-label>
-    </ion-segment-button>
-  </ion-segment>
-</div>
-
-<div class="board-content" style="padding: 0 16px 80px 16px;">
-  <ion-list lines="none" style="background: transparent;">
-    <ion-item *ngFor="let t of visibleTrains()" style="--background: transparent; --padding-start: 0; --inner-padding-end: 0;">
-      <ion-card style="width: 100%; margin: 8px 0; background: var(--ion-item-background); border-left: 5px solid var(--ion-color-primary); box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-        <ion-card-header>
-          <ion-card-subtitle style="color: var(--ion-color-secondary); font-weight: bold; letter-spacing: 1px;">
-            {{t.company | uppercase}} - TREN {{t.commercial_id?.[0]?.numbers?.[0] || '---'}}
-          </ion-card-subtitle>
-          <ion-card-title style="color: var(--ion-text-color); font-size: 1.5rem; font-weight: 800;">
-            <ng-container *ngIf="filterType() === 'salidas'">
-              Cód. Destino: {{t.destinations?.[0]?.code || 'N/A'}}
-            </ng-container>
-            <ng-container *ngIf="filterType() === 'llegadas'">
-              Cód. Origen: {{t.origins?.[0]?.code || 'N/A'}}
-            </ng-container>
-          </ion-card-title>
-        </ion-card-header>
-        <ion-card-content style="display: flex; justify-content: space-between; align-items: center; padding-top: 0;">
-          <h1 style="margin: 0; color: var(--ion-text-color); font-weight: 300; font-size: 2.5rem;">
-            {{ (filterType() === 'salidas' ? t.departure_time : t.arrival_time) | date:'HH:mm' }}
+<div class="adif-board">
+  <!-- HEADER -->
+  <div class="board-header">
+    <div class="header-top">
+      <div class="logo-box" (click)="toggleType()" style="cursor: pointer;" title="Cambiar a Salidas/Llegadas">
+        <div class="adif-logo">adif</div>
+        <div class="title-container">
+          <h1 class="type-title">
+            {{ filterType() === 'salidas' ? 'Salidas' : 'Llegadas' }}
+            <ion-icon name="swap-vertical-outline" class="swap-icon"></ion-icon>
           </h1>
-          <div style="text-align: right;">
-            <div style="font-size: 1.4rem; font-weight: 900; color: var(--ion-color-primary)">
-              Vía {{t.platform || '-'}}
-            </div>
-            <div style="font-size: 0.95rem; font-weight: 600; color: var(--ion-color-tertiary); text-transform: uppercase;">
-              {{t.status}}
-            </div>
+        </div>
+      </div>
+      <div class="station-box">
+        <div class="station-label">Estación de</div>
+        <div class="station-name">{{ adif.stationName() }}</div>
+      </div>
+      <div class="time-box">
+        <div class="clock">{{ currentTime() | date:'HH:mm:ss' }}</div>
+      </div>
+    </div>
+    <div class="header-bottom">
+      <div class="col-time"></div>
+      <div class="col-dest"></div>
+      <div class="col-op"></div>
+      <div class="col-train"></div>
+      <div class="col-acc">Acceso</div>
+      <div class="col-plat">Vía</div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="board-body">
+    <div class="train-row" *ngFor="let t of visibleTrains(); trackBy: trackByTrain">
+      <!-- Time left -->
+      <div class="col-time">
+        <div class="min-left" *ngIf="getMinutesLeft(filterType() === 'salidas' ? (t.departure_time || t.arrival_time) : (t.arrival_time || t.departure_time)) < 60">
+          {{ getMinutesLeft(filterType() === 'salidas' ? (t.departure_time || t.arrival_time) : (t.arrival_time || t.departure_time)) }} min
+        </div>
+        <div class="abs-time" [class.only-abs]="getMinutesLeft(filterType() === 'salidas' ? (t.departure_time || t.arrival_time) : (t.arrival_time || t.departure_time)) >= 60">
+          {{ (filterType() === 'salidas' ? (t.departure_time || t.arrival_time) : (t.arrival_time || t.departure_time)) | date:'HH:mm' }}
+        </div>
+      </div>
+      
+      <!-- Destination -->
+      <div class="col-dest">
+        <div class="dest-main">
+          <span class="line-badge" *ngIf="t.commercial_id?.[0]?.product === 'CERCANÍAS'">C</span>
+          <span class="dest-text">{{ getStationName(t) }}</span>
+        </div>
+      </div>
+      
+      <!-- Responsive wrapper for Info -->
+      <div class="col-info">
+        <!-- Operator -->
+        <div class="col-op">
+          <div class="op-badge" [style.background-color]="getTrainBadgeColor(t.company, t.commercial_id?.[0]?.product || '')">
+            <span class="co">{{ t.company | lowercase }}</span>
+            <span class="prod" *ngIf="t.commercial_id?.[0]?.product">{{ t.commercial_id?.[0]?.product }}</span>
           </div>
-        </ion-card-content>
-      </ion-card>
-    </ion-item>
-  </ion-list>
+        </div>
+        
+        <!-- Train Number -->
+        <div class="col-train">
+          <span class="mobile-label">Tren</span>
+          {{ t.commercial_id?.[0]?.numbers?.[0] || '---' }}
+        </div>
+        
+        <!-- Access -->
+        <div class="col-acc">
+          <span class="mobile-label">Acceso</span>
+          {{ (t.departures_access?.[0] || t.arrivals_access?.[0] || '-').substring(0,3) | uppercase }}
+        </div>
+      </div>
+      
+      <!-- Platform -->
+      <div class="col-plat">
+        <span class="mobile-label-block">Vía</span>
+        {{ t.platform || '-' }}
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="visibleTrains().length === 0" class="empty-state">
+      No hay trenes programados en este momento.
+    </div>
+  </div>
 </div>

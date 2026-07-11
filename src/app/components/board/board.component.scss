@@ -1,0 +1,429 @@
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.adif-board {
+  background-color: #0b1421; /* Dark navy background */
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: white;
+  min-height: 100vh;
+  padding: 8px;
+}
+
+/* -------------------------------------
+ *  HEADER
+ * ------------------------------------- */
+.board-header {
+  background-color: #d8eadc; /* Light cyan/green header */
+  color: #002d40;
+  border-radius: 8px 8px 0 0;
+  padding: 12px;
+  border-bottom: 2px solid #a3c4ab;
+
+  .header-top {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+
+    .logo-box {
+      justify-self: start;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      
+      &:active {
+        transform: scale(0.97);
+      }
+
+      .adif-logo {
+        background-color: #005a40;
+        color: white;
+        font-weight: 900;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 1.1rem;
+        letter-spacing: -0.5px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      
+      .title-container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(0, 90, 64, 0.08);
+        padding: 6px 14px;
+        border-radius: 20px;
+        border: 1px solid rgba(0, 90, 64, 0.15);
+        
+        .type-title {
+          margin: 0;
+          font-size: 1.3rem;
+          font-weight: 800;
+          color: #004030;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          text-transform: uppercase;
+          
+          .swap-icon {
+            font-size: 1.3rem;
+            color: #005a40;
+            animation: bounce 2s infinite ease-in-out;
+          }
+        }
+      }
+    }
+
+    .station-box {
+      justify-self: center;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 0;
+      
+      .station-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #005a40;
+        letter-spacing: 1px;
+        margin-bottom: 2px;
+      }
+      .station-name {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #002d40;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+      }
+    }
+
+    .time-box {
+      justify-self: end;
+      background: #002d40;
+      padding: 6px 14px;
+      border-radius: 8px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+      
+      .clock {
+        font-size: 1.6rem;
+        font-weight: 700;
+        font-family: 'Courier New', Courier, monospace;
+        color: #a3c4ab;
+        line-height: 1;
+        letter-spacing: 1px;
+      }
+    }
+  }
+}
+
+.header-bottom {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #005a40;
+  text-transform: uppercase;
+  margin-top: 12px;
+  
+  .col-acc, .col-plat {
+    text-align: center;
+  }
+}
+
+/* -------------------------------------
+ *  BODY BASE
+ * ------------------------------------- */
+.board-body {
+  background-color: #0b1421;
+  border: 1px solid #1a2a40;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+
+  .train-row {
+    border-bottom: 1px solid #1c2b42;
+    padding: 10px;
+
+    &:nth-child(even) {
+      background-color: #111a2a;
+    }
+  }
+
+  .col-time {
+    .min-left {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #b0c4de;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .abs-time {
+      font-size: 0.85rem;
+      color: #6a82a0;
+      margin-top: 2px;
+      &.only-abs {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #b0c4de;
+        margin-top: 0;
+      }
+    }
+  }
+
+  .col-dest {
+    min-width: 0; 
+    .dest-main {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      .dest-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .line-badge {
+        background-color: #9d324b;
+        color: white;
+        border-radius: 50%;
+        min-width: 20px;
+        height: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        flex-shrink: 0;
+      }
+    }
+  }
+}
+
+.mobile-label, .mobile-label-block { 
+  display: none; 
+}
+
+.empty-state {
+  padding: 40px;
+  color: #a4b4c4;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+/* -------------------------------------
+ *  DESKTOP VIEW (>= 768px)
+ * ------------------------------------- */
+@media (min-width: 768px) {
+  .train-row, .header-bottom {
+    display: grid;
+    /* Ajustado para dar más espacio al tiempo y a Acceso */
+    grid-template-columns: 100px 1fr 80px 80px 80px 60px;
+    gap: 16px;
+    align-items: center;
+  }
+
+  /* The wrapper vanishes in desktop grid */
+  .col-info {
+    display: contents; 
+  }
+
+  .col-time {
+    text-align: center;
+  }
+
+  .col-op {
+    display: flex;
+    justify-content: center;
+    .op-badge {
+      padding: 4px 6px;
+      border-radius: 4px;
+      color: white;
+      font-weight: 800;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.1;
+      width: 100%;
+      text-align: center;
+
+      .prod {
+        font-size: 0.75rem;
+        font-style: italic;
+      }
+    }
+  }
+
+  .col-train {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-align: center;
+  }
+
+  .col-acc {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-align: center;
+  }
+
+  .col-plat {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #ffffff;
+    text-align: center;
+  }
+}
+
+/* -------------------------------------
+ *  MOBILE VIEW (< 768px)
+ * ------------------------------------- */
+@media (max-width: 767px) {
+  .header-bottom { 
+    display: none; 
+  }
+
+  .board-header {
+    padding: 10px;
+    
+    .header-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      
+      .logo-box { 
+        gap: 6px; 
+        .adif-logo { font-size: 0.9rem; padding: 2px 5px; }
+        .title-container { padding: 4px 8px; }
+        .type-title { 
+          font-size: 1rem; 
+          .swap-icon { font-size: 1.1rem; }
+        }
+      }
+      
+      .time-box { 
+        padding: 4px 8px;
+        .clock { font-size: 1.1rem; } 
+      }
+      
+      .station-box { 
+        width: 100%;
+        text-align: left;
+        align-items: flex-start;
+        border-top: 1px dashed rgba(0, 90, 64, 0.2);
+        padding-top: 8px;
+        
+        .station-name { font-size: 1.15rem; white-space: normal; }
+      }
+    }
+  }
+
+  .train-row {
+    display: grid;
+    grid-template-columns: 72px 1fr 40px;
+    grid-template-areas: 
+      "time dest plat"
+      "time info plat";
+    gap: 4px 8px;
+    align-items: center;
+  }
+
+  .col-time {
+    grid-area: time;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    .min-left { font-size: 1.2rem; }
+    .abs-time { font-size: 0.8rem; }
+    .abs-time.only-abs {
+      font-size: 1.05rem;
+      margin-top: 0;
+      letter-spacing: -0.5px;
+    }
+  }
+
+  .col-dest {
+    grid-area: dest;
+  }
+
+  .col-info {
+    grid-area: info;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    margin-top: 2px;
+  }
+
+  .col-plat {
+    grid-area: plat;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 6px 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #ffffff;
+  }
+
+  /* Inline mobile styles for info elements */
+  .col-op, .col-train, .col-acc {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .col-op .op-badge {
+    padding: 2px 6px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    border-radius: 3px;
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: row; /* horizontal on mobile */
+    gap: 4px;
+    align-items: baseline;
+    color: white;
+
+    .co { display: none; } /* Hide the company name, show only product on mobile, or vice versa? Let's show all */
+    .co { display: inline; }
+    .prod { font-style: italic; }
+  }
+
+  .col-train, .col-acc {
+    font-size: 0.85rem;
+    font-weight: normal;
+    color: #e0e6ed;
+  }
+
+  .mobile-label { 
+    display: inline; 
+    font-weight: bold; 
+    margin-right: 4px; 
+    color: #8c9eae; 
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .mobile-label-block { 
+    display: block; 
+    font-size: 0.65rem; 
+    color: #a3c4ab; 
+    text-transform: uppercase; 
+    margin-bottom: 2px;
+  }
+}

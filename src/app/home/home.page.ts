@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { 
   IonHeader, IonToolbar, IonTitle, IonContent, 
-  IonGrid, IonRow, IonCol, IonFab, IonFabButton, IonIcon, IonModal 
+  IonGrid, IonRow, IonCol, IonFab, IonFabButton, IonIcon, IonMenu, IonMenuToggle
 } from '@ionic/angular/standalone';
 import { BoardComponent } from '../components/board/board.component';
 import { ConfigPanelComponent } from '../components/config-panel/config-panel.component';
@@ -14,7 +14,7 @@ import { optionsOutline } from 'ionicons/icons';
   styleUrls: ['home.page.scss'],
   imports: [
     IonHeader, IonToolbar, IonTitle, IonContent,
-    IonGrid, IonRow, IonCol, IonFab, IonFabButton, IonIcon, IonModal,
+    IonGrid, IonRow, IonCol, IonFab, IonFabButton, IonIcon, IonMenu, IonMenuToggle,
     BoardComponent, ConfigPanelComponent
   ],
 })

@@ -8,7 +8,11 @@ describe('HomePage', () => {
   let fixture: ComponentFixture<HomePage>;
 
   beforeEach(async () => {
-    const adifSpy = { trains: signal([]) };
+    const adifSpy = { 
+      trains: signal([]), 
+      stationName: signal('Madrid'),
+      activeFilters: signal(['CERCANÍAS', 'AVE', 'AVANT', 'ALVIA', 'OUIGO', 'IRYO', 'INTERCITY', 'TRENHOTEL', 'REGIONAL', 'MD'])
+    };
 
     await TestBed.configureTestingModule({
       imports: [HomePage],
