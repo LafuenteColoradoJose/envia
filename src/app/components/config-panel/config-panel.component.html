@@ -13,27 +13,6 @@
       </ion-button>
     </div>
 
-    <!-- Station Selection -->
-    <div class="config-card">
-      <div class="card-header">
-        <ion-icon name="train-outline"></ion-icon>
-        <h3>Estación</h3>
-      </div>
-      <ion-searchbar mode="ios" (ionInput)="filterStations($event)" placeholder="Buscar estación..." class="custom-searchbar"></ion-searchbar>
-      
-      <div class="station-list-container">
-        <ion-list class="station-list">
-          <ion-item *ngFor="let s of filteredStations" (click)="changeStation(s.code)" button detail="false" [class.selected]="selectedStation === s.code" lines="none">
-            <ion-label>
-              <h2>{{ s.name || s.title }}</h2>
-              <p *ngIf="s.location">{{ s.location.province }}</p>
-            </ion-label>
-            <ion-icon *ngIf="selectedStation === s.code" name="checkmark-circle" slot="end" color="primary"></ion-icon>
-          </ion-item>
-        </ion-list>
-      </div>
-    </div>
-
     <!-- Traffic Filters -->
     <div class="config-card">
       <div class="card-header">
@@ -63,6 +42,13 @@
           <ion-label>Oscuro</ion-label>
         </ion-segment-button>
       </ion-segment>
+    </div>
+
+    <!-- Legal Disclaimer -->
+    <div class="legal-disclaimer">
+      <p>
+        <strong>Nota:</strong> Aplicación realizada por motivos de aprendizaje de Angular e Ionic, no tiene carácter comercial. Todos los nombres y datos mostrados pertenecen a ADIF y a sus respectivas compañías.
+      </p>
     </div>
   </div>
 </ion-content>

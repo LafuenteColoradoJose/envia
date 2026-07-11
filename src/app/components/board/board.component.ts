@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy, computed, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, computed, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { 
-  IonGrid, IonRow, IonCol, IonIcon
+  IonIcon, IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonSearchbar, IonList, IonItem, IonLabel, IonContent
 } from '@ionic/angular/standalone';
 import { AdifService } from '../../services/adif.service';
 import { addIcons } from 'ionicons';
-import { swapVerticalOutline } from 'ionicons/icons';
+import { swapVerticalOutline, createOutline } from 'ionicons/icons';
+import { PopularStations, Stations } from '../../constants/stations';
 
 @Component({
   selector: 'app-board',
@@ -14,10 +15,13 @@ import { swapVerticalOutline } from 'ionicons/icons';
   standalone: true,
   imports: [
     CommonModule,
-    IonGrid, IonRow, IonCol, IonIcon
+    IonIcon, IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonSearchbar, IonList, IonItem, IonLabel, IonContent
   ]
 })
 export class BoardComponent implements OnInit, OnDestroy {
+  @ViewChild('stationModal') stationModal: any;
+  public allStations = Stations;
+  public filteredStations = PopularStations;
   public filterType = signal<'salidas' | 'llegadas'>('salidas');
   public currentTime = signal<Date>(new Date());
   private timer: any;
@@ -68,7 +72,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   });
 
   constructor(public adif: AdifService) { 
-    addIcons({ swapVerticalOutline });
+    addIcons({ swapVerticalOutline, createOutline });
   }
 
   ngOnInit() {
@@ -125,5 +129,31 @@ export class BoardComponent implements OnInit, OnDestroy {
     const trainNum = t.commercial_id?.[0]?.numbers?.[0] || '';
     const dest = t.destinations?.[0]?.code || '';
     return `${trainNum}-${dest}`;
+  }
+
+  openStationModal() {
+    this.filteredStations = [...PopularStations];
+    this.stationModal?.present();
+  }
+
+  closeStationModal() {
+    this.stationModal?.dismiss();
+  }
+
+  filterStations(event: any) {
+    const term = (event.target.value || '').toLowerCase();
+    if (!term) {
+      this.filteredStations = PopularStations;
+      return;
+    }
+    this.filteredStations = this.allStations
+      .filter(s => s.name.toLowerCase().includes(term) || s.code.includes(term))
+      .slice(0, 50);
+  }
+
+  changeStation(code: string) {
+    localStorage.setItem('selectedStation', code);
+    this.adif.startConnection(code);
+    this.closeStationModal();
   }
 }

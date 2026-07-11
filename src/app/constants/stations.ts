@@ -1,15 +1,15 @@
 export const PopularStations = [
-  { title: 'Chamartín', code: '17000' },
-  { title: 'Atocha Cercanías', code: '18000' },
-  { title: 'Puerta de Atocha', code: '60000' },
-  { title: 'Barcelona Sants', code: '71801' },
-  { title: 'Valencia Nord', code: '65000' },
-  { title: 'Valencia Joaquín Sorolla', code: '03216' },
-  // { title: 'Zaragoza Delicias', code: '71000' },
-  // { title: 'Bilbao Abando', code: '13200' },
-  { title: 'Sevilla Santa Justa', code: '51003' },
-  // { title: 'Málaga María Zambrano', code: '54413' },
-  // { title: 'Santiago de Compostela', code: '31400' },
+  { name: 'Chamartín', code: '17000' },
+  { name: 'Atocha Cercanías', code: '18000' },
+  { name: 'Puerta de Atocha', code: '60000' },
+  { name: 'Barcelona Sants', code: '71801' },
+  { name: 'Valencia Nord', code: '65000' },
+  { name: 'Valencia Joaquín Sorolla', code: '03216' },
+  // { name: 'Zaragoza Delicias', code: '71000' },
+  // { name: 'Bilbao Abando', code: '13200' },
+  { name: 'Sevilla Santa Justa', code: '51003' },
+  // { name: 'Málaga María Zambrano', code: '54413' },
+  // { name: 'Santiago de Compostela', code: '31400' },
 ]
 
 export const Stations = [

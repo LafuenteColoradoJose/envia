@@ -63,3 +63,6 @@ npm run test -- --code-coverage
 
 ---
 
+## ⚠️ Nota Legal
+
+**Aplicación realizada por motivos de aprendizaje de Angular e Ionic.** No tiene carácter comercial ni está afiliada a ADIF. Esta web solo es un visor de información al viajero. Todas las marcas, logotipos y datos mostrados pertenecen a ADIF y a sus respectivas compañías ferroviarias.
