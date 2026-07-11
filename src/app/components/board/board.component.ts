@@ -5,7 +5,7 @@ import {
 } from '@ionic/angular/standalone';
 import { AdifService } from '../../services/adif.service';
 import { addIcons } from 'ionicons';
-import { swapVerticalOutline, createOutline } from 'ionicons/icons';
+import { swapVerticalOutline, createOutline, train } from 'ionicons/icons';
 import { PopularStations, Stations } from '../../constants/stations';
 
 @Component({
@@ -91,7 +91,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   });
 
   constructor(public adif: AdifService) { 
-    addIcons({ swapVerticalOutline, createOutline });
+    addIcons({ swapVerticalOutline, createOutline, train });
   }
 
   ngOnInit() {
