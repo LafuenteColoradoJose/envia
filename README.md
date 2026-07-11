@@ -53,6 +53,29 @@ Para correr el proyecto en tu entorno local:
    ```
 4. Abre `http://localhost:8100` en tu navegador.
 
+## 📱 Soporte Multiplataforma (PWA, Android, iOS)
+
+El proyecto está configurado para distribuirse en múltiples plataformas:
+
+*   **PWA (Progressive Web App)**: La aplicación cuenta con *Service Worker* y manifiesto. Al visitar la web desde un móvil o escritorio (por HTTPS), el navegador ofrecerá "Instalar Aplicación", añadiendo el icono nativo a la pantalla de inicio.
+*   **Capacitor (Android e iOS)**: El proyecto contiene el código base nativo y los plugins esenciales.
+
+Para compilar y empaquetar para las tiendas de aplicaciones:
+
+1. Genera la última compilación web:
+   ```bash
+   npx ng build
+   ```
+2. Sincroniza el código web con las plataformas nativas:
+   ```bash
+   npx cap sync
+   ```
+3. Abre el entorno de desarrollo correspondiente para lanzar el emulador o generar el archivo binario:
+   ```bash
+   npx cap open android   # Abre Android Studio
+   npx cap open ios       # Abre Xcode (Solo macOS)
+   ```
+
 ## 🧪 Tests Unitarios
 
 Para comprobar la cobertura de código y ejecutar la suite de tests:
