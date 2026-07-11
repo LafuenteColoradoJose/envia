@@ -10,6 +10,13 @@
 
 ---
 
+## 🌐 Demo en Vivo
+
+La aplicación está desplegada en Vercel y se puede probar directamente desde cualquier navegador web o móvil:
+**👉 [Prueba EnVía aquí: https://envia-pink.vercel.app/home](https://envia-pink.vercel.app/home)**
+
+---
+
 ## 📖 Sobre el Proyecto
 
 **EnVía** es una Progressive Web App (PWA) moderna y de alto rendimiento diseñada para consultar en **tiempo real** los paneles de información de trenes de la red de ADIF (España).
