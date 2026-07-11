@@ -1,5 +1,5 @@
 <div class="board-header" style="padding: 16px; position: sticky; top: 0; background: var(--ion-background-color); z-index: 10;">
-  <ion-segment [value]="filterType" (ionChange)="segmentChanged($event)" color="primary" mode="ios">
+  <ion-segment [value]="filterType()" (ionChange)="segmentChanged($event)" color="primary" mode="ios">
     <ion-segment-button value="salidas">
       <ion-label>Salidas</ion-label>
     </ion-segment-button>
@@ -18,17 +18,17 @@
             {{t.company | uppercase}} - TREN {{t.commercial_id?.[0]?.numbers?.[0] || '---'}}
           </ion-card-subtitle>
           <ion-card-title style="color: var(--ion-text-color); font-size: 1.5rem; font-weight: 800;">
-            <ng-container *ngIf="filterType === 'salidas'">
+            <ng-container *ngIf="filterType() === 'salidas'">
               Cód. Destino: {{t.destinations?.[0]?.code || 'N/A'}}
             </ng-container>
-            <ng-container *ngIf="filterType === 'llegadas'">
+            <ng-container *ngIf="filterType() === 'llegadas'">
               Cód. Origen: {{t.origins?.[0]?.code || 'N/A'}}
             </ng-container>
           </ion-card-title>
         </ion-card-header>
         <ion-card-content style="display: flex; justify-content: space-between; align-items: center; padding-top: 0;">
           <h1 style="margin: 0; color: var(--ion-text-color); font-weight: 300; font-size: 2.5rem;">
-            {{ (filterType === 'salidas' ? t.departure_time : t.arrival_time) | date:'HH:mm' }}
+            {{ (filterType() === 'salidas' ? t.departure_time : t.arrival_time) | date:'HH:mm' }}
           </h1>
           <div style="text-align: right;">
             <div style="font-size: 1.4rem; font-weight: 900; color: var(--ion-color-primary)">

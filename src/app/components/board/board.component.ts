@@ -1,4 +1,4 @@
-import { Component, OnInit, computed } from '@angular/core';
+import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { 
   IonSegment, IonSegmentButton, IonLabel, 
@@ -18,11 +18,11 @@ import { AdifService } from '../../services/adif.service';
   ]
 })
 export class BoardComponent implements OnInit {
-  public filterType: 'salidas' | 'llegadas' = 'salidas';
+  public filterType = signal<'salidas' | 'llegadas'>('salidas');
   
   // Computamos los trenes filtrados dinámicamente: L = Salidas, R = Llegadas
   public visibleTrains = computed(() => {
-    const filterKey = this.filterType === 'salidas' ? 'L' : 'R';
+    const filterKey = this.filterType() === 'salidas' ? 'L' : 'R';
     return this.adif.trains().filter(t => t.traffic_type === filterKey);
   });
 
@@ -31,6 +31,6 @@ export class BoardComponent implements OnInit {
   ngOnInit() {}
 
   segmentChanged(event: any) {
-    this.filterType = event.detail.value;
+    this.filterType.set(event.detail.value);
   }
 }
