@@ -1,4 +1,5 @@
 <div align="center">
+  <img src="src/assets/logo.png" width="128" height="128" alt="EnVía Logo" style="border-radius: 24px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); margin-bottom: 16px;" />
   <h1>🚆 EnVía</h1>
   <p><strong>Paneles de Salidas y Llegadas de ADIF en Tiempo Real</strong></p>
   
