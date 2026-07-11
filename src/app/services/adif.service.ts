@@ -1,6 +1,6 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
-import { Stations } from '../constants/stations';
+import { Stations, PopularStations } from '../constants/stations';
 
 @Injectable({
   providedIn: 'root',
@@ -18,8 +18,8 @@ export class AdifService {
   public stationDictionary: Record<string, string> = {};
 
   constructor() {
-    // Inicializar el diccionario desde el array gigante
-    Stations.forEach(s => {
+    // Inicializar el diccionario desde el array gigante y los populares
+    [...PopularStations, ...Stations].forEach(s => {
       this.stationDictionary[s.code] = s.name;
     });
   }

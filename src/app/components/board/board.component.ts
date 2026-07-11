@@ -56,7 +56,26 @@ export class BoardComponent implements OnInit, OnDestroy {
       
       const product = t.commercial_id?.[0]?.product?.toUpperCase() || '';
       if (!product || product === 'TREN') return true;
-      return activeKeywords.some((keyword: string) => product.includes(keyword));
+      
+      let matchesProduct = activeKeywords.some((keyword: string) => {
+        if (keyword === 'CERCANÍAS') {
+          return product.includes('CERCANÍAS') || product.includes('CERMAD') || product.includes('CER') || product.includes('ROD');
+        }
+        return product.includes(keyword);
+      });
+      
+      if (!matchesProduct) return false;
+      
+      // Ocultar trenes que ya han salido (más de 1 minuto en el pasado)
+      const timeStr = isSalidas ? (t.departure_time || t.arrival_time) : (t.arrival_time || t.departure_time);
+      if (timeStr) {
+        const time = new Date(timeStr).getTime();
+        const now = this.currentTime().getTime();
+        const diff = (time - now) / 60000;
+        if (diff < -1) return false;
+      }
+      
+      return true;
     });
 
     // Sort by the relevant time
@@ -94,11 +113,33 @@ export class BoardComponent implements OnInit, OnDestroy {
     const lowerPr = product?.toLowerCase() || '';
     if (lowerPr.includes('ave') || lowerCo.includes('ave')) return '#7e2d68'; 
     if (lowerPr.includes('alvia') || lowerCo.includes('alvia')) return '#7e2d68'; 
-    if (lowerPr.includes('cercanías') || lowerCo.includes('cercanías')) return '#e4002b'; 
+    if (lowerPr.includes('cercanías') || lowerCo.includes('cercanías') || lowerPr.includes('cer') || lowerPr.includes('rod')) return '#e4002b'; 
     if (lowerPr.includes('avant')) return '#f37021'; 
     if (lowerCo.includes('iryo')) return '#da251d'; 
     if (lowerCo.includes('ouigo')) return '#00d2ff'; 
     return '#888'; 
+  }
+
+  getCleanProduct(product: string): string {
+    if (!product) return '';
+    const upper = product.toUpperCase();
+    if (upper.includes('CER') || upper.includes('ROD')) {
+      return 'CERCANÍAS';
+    }
+    return upper;
+  }
+
+  getCercaniasLine(product: string): string | null {
+    if (!product) return null;
+    const upper = product.toUpperCase();
+    if (upper.includes('CER') || upper.includes('ROD')) {
+      const match = upper.match(/^(C0?\d+[A-Z]?)(CER|ROD)/);
+      if (match) {
+        return match[1].replace('C0', 'C');
+      }
+      return 'C';
+    }
+    return null;
   }
 
   getMinutesLeft(timeStr: string): number {
@@ -115,13 +156,35 @@ export class BoardComponent implements OnInit, OnDestroy {
     
     const name = list[0].name;
     const code = list[0].code;
-    
-    // Si ADIF manda nombre vacío, intentamos cruzar con el diccionario usando el código
-    if ((!name || name.trim() === '') && code) {
-      return this.adif.stationDictionary[code] || code;
+
+    let finalName = name || code || 'N/A';
+
+    // Si ADIF manda nombre vacío, o manda el propio código numérico como nombre
+    if (!name || name.trim() === '' || /^\d+$/.test(name.trim())) {
+      const targetCode = code || name;
+      if (targetCode) {
+        const paddedCode = String(targetCode).trim().padStart(5, '0');
+        finalName = this.adif.stationDictionary[paddedCode] || targetCode;
+      }
     }
     
-    return name || code || 'N/A';
+    finalName = finalName.trim();
+    
+    // Limpiar prefijos redundantes como hace la web de ADIF para que quepa mejor en pantalla
+    if (finalName.startsWith('Madrid - ')) {
+      finalName = finalName.replace('Madrid - ', '');
+    }
+    if (finalName.startsWith('Madrid-')) {
+      finalName = finalName.replace('Madrid-', '');
+    }
+    if (finalName.startsWith('Madrid ')) {
+      finalName = finalName.replace('Madrid ', '');
+    }
+    if (finalName === 'Príncipe Pío') finalName = 'Príncipe Pío'; // just in case
+    if (finalName === 'Alcob.Sseb') finalName = 'Alcobendas-S.S. Reyes';
+    if (finalName === 'San Fernando De Henares') finalName = 'San Fernando Henares';
+    
+    return finalName;
   }
 
   trackByTrain(index: number, t: any): string {

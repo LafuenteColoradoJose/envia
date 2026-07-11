@@ -45,7 +45,7 @@
       <!-- Destination -->
       <div class="col-dest">
         <div class="dest-main">
-          <span class="line-badge" *ngIf="t.commercial_id?.[0]?.product === 'CERCANÍAS'">C</span>
+          <span class="line-badge" *ngIf="getCercaniasLine(t.commercial_id?.[0]?.product)">{{ getCercaniasLine(t.commercial_id?.[0]?.product) }}</span>
           <span class="dest-text">{{ getStationName(t) }}</span>
         </div>
       </div>
@@ -56,7 +56,7 @@
         <div class="col-op">
           <div class="op-badge" [style.background-color]="getTrainBadgeColor(t.company, t.commercial_id?.[0]?.product || '')">
             <span class="co">{{ t.company | lowercase }}</span>
-            <span class="prod" *ngIf="t.commercial_id?.[0]?.product">{{ t.commercial_id?.[0]?.product }}</span>
+            <span class="prod" *ngIf="t.commercial_id?.[0]?.product">{{ getCleanProduct(t.commercial_id?.[0]?.product) }}</span>
           </div>
         </div>
         
