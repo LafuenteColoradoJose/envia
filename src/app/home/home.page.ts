@@ -19,6 +19,8 @@ import { optionsOutline } from 'ionicons/icons';
   ],
 })
 export class HomePage {
+  public desktopPanelVisible = true;
+
   constructor() {
     addIcons({ optionsOutline });
   }

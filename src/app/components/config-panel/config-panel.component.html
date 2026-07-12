@@ -5,9 +5,16 @@
       Configuración
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="closeModal()" color="medium" style="margin-right: 16px;">
-        <ion-icon name="close-circle" slot="icon-only" style="font-size: 1.8rem;"></ion-icon>
-      </ion-button>
+      @if (!isDesktop) {
+        <ion-button (click)="closeModal()" color="medium" style="margin-right: 16px;">
+          <ion-icon name="close-circle" slot="icon-only" style="font-size: 1.8rem;"></ion-icon>
+        </ion-button>
+      }
+      @if (isDesktop) {
+        <ion-button (click)="onCollapse.emit()" color="medium" style="margin-right: 16px;" title="Ocultar panel">
+          <ion-icon name="chevron-back-outline" slot="icon-only" style="font-size: 1.8rem;"></ion-icon>
+        </ion-button>
+      }
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

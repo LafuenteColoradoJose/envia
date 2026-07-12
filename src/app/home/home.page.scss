@@ -12,6 +12,10 @@
   background: var(--ion-background-color);
 }
 
+.desktop-fab {
+  display: none; // Oculta el desktop fab por defecto (móvil)
+}
+
 // Media query para el layout de escritorio
 @media (min-width: 992px) {
   .desktop-panel {
@@ -19,6 +23,9 @@
   }
   .mobile-fab {
     display: none; // Oculta el FAB en escritorio
+  }
+  .desktop-fab {
+    display: block; // Muestra el FAB de escritorio cuando está disponible
   }
 }
 

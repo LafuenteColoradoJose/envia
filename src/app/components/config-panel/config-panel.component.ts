@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonContent, IonLabel, IonChip, IonSegment, IonSegmentButton, IonIcon, IonButton, MenuController, IonHeader, IonToolbar, IonTitle, IonButtons } from '@ionic/angular/standalone';
 import { AdifService } from '../../services/adif.service';
 import { addIcons } from 'ionicons';
-import { optionsOutline, trainOutline, filterOutline, colorPaletteOutline, sunnyOutline, moonOutline, checkmarkCircle, closeCircle, globeOutline, logoGithub, logoLinkedin } from 'ionicons/icons';
+import { optionsOutline, trainOutline, filterOutline, colorPaletteOutline, sunnyOutline, moonOutline, checkmarkCircle, closeCircle, globeOutline, logoGithub, logoLinkedin, chevronBackOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-config-panel',
@@ -13,6 +13,9 @@ import { optionsOutline, trainOutline, filterOutline, colorPaletteOutline, sunny
   imports: [CommonModule, IonContent, IonLabel, IonChip, IonSegment, IonSegmentButton, IonIcon, IonButton, IonHeader, IonToolbar, IonTitle, IonButtons]
 })
 export class ConfigPanelComponent implements OnInit {
+
+  @Input() isDesktop: boolean = false;
+  @Output() onCollapse = new EventEmitter<void>();
 
   public currentTheme: string = 'dark'; // Dark theme is better suited for this board default
 
@@ -24,7 +27,7 @@ export class ConfigPanelComponent implements OnInit {
   ];
 
   constructor(public adif: AdifService, private menuCtrl: MenuController) { 
-    addIcons({ optionsOutline, trainOutline, filterOutline, colorPaletteOutline, sunnyOutline, moonOutline, checkmarkCircle, closeCircle, globeOutline, logoGithub, logoLinkedin });
+    addIcons({ optionsOutline, trainOutline, filterOutline, colorPaletteOutline, sunnyOutline, moonOutline, checkmarkCircle, closeCircle, globeOutline, logoGithub, logoLinkedin, chevronBackOutline });
   }
 
   ngOnInit() {
