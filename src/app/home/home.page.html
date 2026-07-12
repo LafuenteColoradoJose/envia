@@ -7,12 +7,14 @@
     <ion-row style="height: 100%;">
       
       <!-- Panel de configuración (solo en escritorio) -->
-      <ion-col size="12" size-lg="3" class="desktop-panel">
-        <app-config-panel></app-config-panel>
-      </ion-col>
+      @if (desktopPanelVisible) {
+        <ion-col size="12" size-lg="3" class="desktop-panel">
+          <app-config-panel [isDesktop]="true" (onCollapse)="desktopPanelVisible = false"></app-config-panel>
+        </ion-col>
+      }
       
       <!-- Panel principal con la lista de trenes -->
-      <ion-col size="12" size-lg="9" class="main-panel">
+      <ion-col size="12" [sizeLg]="desktopPanelVisible ? '9' : '12'" class="main-panel">
         <app-board></app-board>
       </ion-col>
       
@@ -27,4 +29,13 @@
       </ion-fab-button>
     </ion-menu-toggle>
   </ion-fab>
+
+  <!-- Botón flotante para restaurar controles en escritorio -->
+  @if (!desktopPanelVisible) {
+    <ion-fab slot="fixed" vertical="bottom" horizontal="start" class="desktop-fab" style="margin-left: 16px;">
+      <ion-fab-button color="primary" (click)="desktopPanelVisible = true" title="Mostrar opciones">
+        <ion-icon name="options-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  }
 </ion-content>
