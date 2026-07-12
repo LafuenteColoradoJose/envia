@@ -47,7 +47,7 @@ export class AdifService {
         this.registerEvents();
 
         this.hubConnection.onreconnected(async () => {
-          console.log('🔄 Reconectado automáticamente a SignalR.');
+
           if (this.currentTopic) {
             try {
               await this.hubConnection?.invoke('JoinInfo', this.currentTopic);
@@ -60,7 +60,7 @@ export class AdifService {
 
         try {
           await this.hubConnection.start();
-          console.log('✅ Conectado a ADIF SignalR exitosamente.');
+
           this.connected.set(true);
         } catch (err) {
           console.error('❌ Error al conectar a ADIF SignalR:', err);
@@ -80,7 +80,7 @@ export class AdifService {
       if (this.currentTopic) {
         try {
           await this.hubConnection.invoke('LeaveInfo', this.currentTopic);
-          console.log(`👋 Saliendo de la estación (Topic): ${this.currentTopic}`);
+
         } catch (e) {
           console.error('Error al salir del topic', e);
         }
@@ -95,7 +95,7 @@ export class AdifService {
       try {
         await this.hubConnection.invoke('JoinInfo', newTopic);
         await this.hubConnection.invoke('GetLastMessage', newTopic);
-        console.log(`📡 Suscrito a la estación (Topic): ${newTopic}`);
+
       } catch (e) {
         console.error('Error uniéndose al nuevo topic', e);
       }
@@ -116,7 +116,7 @@ export class AdifService {
         if (payload?.station_settings?.code) {
           const expectedCode = this.currentTopic?.replace('PRO-ECM-', '');
           if (payload.station_settings.code !== expectedCode) {
-            console.warn(`[FANTASMA] Ignorando datos de ${payload.station_settings.name} (${payload.station_settings.code}) porque esperamos ${expectedCode}`);
+
             return;
           }
         }
