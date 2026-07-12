@@ -149,3 +149,47 @@
     ion-icon { font-size: 1.2rem; margin-bottom: 4px; }
   }
 }
+
+.author-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  
+  .author-info {
+    h4 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--ion-color-medium);
+      margin: 0 0 4px 0;
+      font-weight: 700;
+    }
+    h2 {
+      font-size: 1.1rem;
+      margin: 0;
+      font-weight: 800;
+      color: var(--ion-text-color);
+    }
+  }
+
+  .social-links {
+    display: flex;
+    gap: 4px;
+    
+    ion-button {
+      --padding-start: 8px;
+      --padding-end: 8px;
+      margin: 0;
+      height: 36px;
+      
+      ion-icon {
+        font-size: 1.4rem;
+      }
+      
+      &:hover {
+        color: var(--ion-color-primary);
+      }
+    }
+  }
+}

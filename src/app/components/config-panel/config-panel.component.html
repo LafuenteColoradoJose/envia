@@ -6,7 +6,7 @@
           <ion-icon name="options-outline"></ion-icon>
           <h2>Configuración</h2>
         </div>
-        <p class="header-subtitle">Personaliza tu panel de estación ADIF</p>
+        <p class="header-subtitle">Personaliza tu panel de estación</p>
       </div>
       <ion-button (click)="closeModal()" fill="clear" class="close-btn" color="medium">
         <ion-icon name="close-circle" slot="icon-only"></ion-icon>
@@ -42,6 +42,25 @@
           <ion-label>Oscuro</ion-label>
         </ion-segment-button>
       </ion-segment>
+    </div>
+
+    <!-- Author Card -->
+    <div class="config-card author-card">
+      <div class="author-info">
+        <h4>Sobre el autor</h4>
+        <h2>Jose Lafuente</h2>
+      </div>
+      <div class="social-links">
+        <ion-button fill="clear" href="https://www.joselafuente.dev" target="_blank" color="medium">
+          <ion-icon name="globe-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" href="https://github.com/LafuenteColoradoJose" target="_blank" color="medium">
+          <ion-icon name="logo-github" slot="icon-only"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" href="https://www.linkedin.com/in/joselafuentecolorado/" target="_blank" color="medium">
+          <ion-icon name="logo-linkedin" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
     </div>
 
     <!-- Legal Disclaimer -->
