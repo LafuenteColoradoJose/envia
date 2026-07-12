@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IonContent, IonLabel, IonChip, IonSegment, IonSegmentButton, IonIcon, IonButton, MenuController } from '@ionic/angular/standalone';
 import { AdifService } from '../../services/adif.service';
 import { addIcons } from 'ionicons';
-import { optionsOutline, trainOutline, filterOutline, colorPaletteOutline, sunnyOutline, moonOutline, checkmarkCircle, closeCircle } from 'ionicons/icons';
+import { optionsOutline, trainOutline, filterOutline, colorPaletteOutline, sunnyOutline, moonOutline, checkmarkCircle, closeCircle, globeOutline, logoGithub, logoLinkedin } from 'ionicons/icons';
 
 @Component({
   selector: 'app-config-panel',
@@ -24,7 +24,7 @@ export class ConfigPanelComponent implements OnInit {
   ];
 
   constructor(public adif: AdifService, private menuCtrl: MenuController) { 
-    addIcons({ optionsOutline, trainOutline, filterOutline, colorPaletteOutline, sunnyOutline, moonOutline, checkmarkCircle, closeCircle });
+    addIcons({ optionsOutline, trainOutline, filterOutline, colorPaletteOutline, sunnyOutline, moonOutline, checkmarkCircle, closeCircle, globeOutline, logoGithub, logoLinkedin });
   }
 
   ngOnInit() {
