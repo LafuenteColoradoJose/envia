@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonContent, IonLabel, IonChip, IonSegment, IonSegmentButton, IonIcon, IonButton, MenuController } from '@ionic/angular/standalone';
+import { IonContent, IonLabel, IonChip, IonSegment, IonSegmentButton, IonIcon, IonButton, MenuController, IonHeader, IonToolbar, IonTitle, IonButtons } from '@ionic/angular/standalone';
 import { AdifService } from '../../services/adif.service';
 import { addIcons } from 'ionicons';
 import { optionsOutline, trainOutline, filterOutline, colorPaletteOutline, sunnyOutline, moonOutline, checkmarkCircle, closeCircle, globeOutline, logoGithub, logoLinkedin } from 'ionicons/icons';
@@ -10,7 +10,7 @@ import { optionsOutline, trainOutline, filterOutline, colorPaletteOutline, sunny
   templateUrl: './config-panel.component.html',
   styleUrls: ['./config-panel.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonContent, IonLabel, IonChip, IonSegment, IonSegmentButton, IonIcon, IonButton]
+  imports: [CommonModule, IonContent, IonLabel, IonChip, IonSegment, IonSegmentButton, IonIcon, IonButton, IonHeader, IonToolbar, IonTitle, IonButtons]
 })
 export class ConfigPanelComponent implements OnInit {
 

@@ -1,17 +1,20 @@
+<ion-header mode="md" class="ion-no-border">
+  <ion-toolbar>
+    <ion-title style="font-weight: 800; font-size: 1.2rem; letter-spacing: -0.5px; padding-inline: 24px;">
+      <ion-icon name="options-outline" style="vertical-align: text-bottom; margin-right: 8px; color: var(--ion-color-primary);"></ion-icon>
+      Configuración
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()" color="medium" style="margin-right: 16px;">
+        <ion-icon name="close-circle" slot="icon-only" style="font-size: 1.8rem;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content class="config-content">
   <div class="config-container">
-    <div class="header-section">
-      <div class="header-content">
-        <div class="header-title">
-          <ion-icon name="options-outline"></ion-icon>
-          <h2>Configuración</h2>
-        </div>
-        <p class="header-subtitle">Personaliza tu panel de estación</p>
-      </div>
-      <ion-button (click)="closeModal()" fill="clear" class="close-btn" color="medium">
-        <ion-icon name="close-circle" slot="icon-only"></ion-icon>
-      </ion-button>
-    </div>
+    <p class="header-subtitle" style="margin-top: 0; margin-bottom: 24px; color: var(--ion-color-medium); font-size: 0.95rem;">Personaliza tu panel de estación</p>
 
     <!-- Traffic Filters -->
     <div class="config-card">
