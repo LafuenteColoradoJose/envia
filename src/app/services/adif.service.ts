@@ -5,11 +5,14 @@ import { Stations, PopularStations } from '../constants/stations';
 @Injectable({
   providedIn: 'root',
 })
+/**
+ * Service responsible for managing the SignalR connection to the ADIF WebSocket API.
+ * Provides real-time train data for a specific station.
+ */
 export class AdifService {
   private hubConnection: signalR.HubConnection | undefined;
   private currentTopic: string | null = null;
   
-  // Signals para un estado reactivo moderno (Angular 16+)
   public connected = signal<boolean>(false);
   public trains: WritableSignal<any[]> = signal([]);
   public stationName: WritableSignal<string> = signal('');
@@ -18,7 +21,6 @@ export class AdifService {
   public stationDictionary: Record<string, string> = {};
 
   constructor() {
-    // Inicializar el diccionario desde el array gigante y los populares
     [...PopularStations, ...Stations].forEach(s => {
       this.stationDictionary[s.code] = s.name;
     });
@@ -26,21 +28,24 @@ export class AdifService {
 
   private isConnecting: boolean = false;
 
+  /**
+   * Initializes and starts the SignalR connection for a given station.
+   * @param stationCode The ADIF station code (e.g., '60000' for Madrid Atocha)
+   */
   public async startConnection(stationCode: string = '60000') { // 60000 = Atocha
-    // Prevenir condiciones de carrera si se llama varias veces rápido
+    // Prevent race conditions if called multiple times in quick succession
     while (this.isConnecting) {
       await new Promise(r => setTimeout(r, 100));
     }
     this.isConnecting = true;
 
     try {
-      // Inicializar conexión solo la primera vez
       if (!this.hubConnection) {
         this.hubConnection = new signalR.HubConnectionBuilder()
           .withUrl('https://info.adif.es/InfoStation', {
             skipNegotiation: true,
             transport: signalR.HttpTransportType.WebSockets
-          }) // Saltamos la negociación HTTP para evitar CORS y forzamos WebSockets puros
+          }) // Skip HTTP negotiation to avoid CORS and force pure WebSockets
           .withAutomaticReconnect()
           .build();
 
@@ -53,7 +58,7 @@ export class AdifService {
               await this.hubConnection?.invoke('JoinInfo', this.currentTopic);
               await this.hubConnection?.invoke('GetLastMessage', this.currentTopic);
             } catch (e) {
-              console.error('Error al re-unirse tras reconexión', e);
+              console.error('Error re-joining after reconnection', e);
             }
           }
         });
@@ -63,7 +68,7 @@ export class AdifService {
 
           this.connected.set(true);
         } catch (err) {
-          console.error('❌ Error al conectar a ADIF SignalR:', err);
+          console.error('❌ Error connecting to ADIF SignalR:', err);
           this.connected.set(false);
           return;
         }
@@ -71,33 +76,31 @@ export class AdifService {
 
       const newTopic = `PRO-ECM-${stationCode}`;
 
-      // Si ya estamos suscritos al mismo topic, no hacer nada extra
       if (this.currentTopic === newTopic) {
         return;
       }
 
-      // Si había un topic anterior, abandonarlo
       if (this.currentTopic) {
         try {
           await this.hubConnection.invoke('LeaveInfo', this.currentTopic);
 
         } catch (e) {
-          console.error('Error al salir del topic', e);
+          console.error('Error leaving topic', e);
         }
       }
 
       this.currentTopic = newTopic;
-      this.trains.set([]); // Limpiar trenes antes de recibir los nuevos
+      this.trains.set([]);
       this.stationName.set('Cargando...');
 
-      // ADIF requiere unirse al 'Topic' (el código de la estación con prefijo PRO-ECM-)
-      // y solicitar explícitamente el último mensaje para pintar la pantalla inicial.
+      // ADIF requires joining the 'Topic' (station code with PRO-ECM- prefix)
+      // and explicitly request the last message to paint the initial screen.
       try {
         await this.hubConnection.invoke('JoinInfo', newTopic);
         await this.hubConnection.invoke('GetLastMessage', newTopic);
 
       } catch (e) {
-        console.error('Error uniéndose al nuevo topic', e);
+        console.error('Error joining the new topic', e);
       }
     } finally {
       this.isConnecting = false;
@@ -107,12 +110,12 @@ export class AdifService {
   private registerEvents() {
     if (!this.hubConnection) return;
 
-    // 'ReceiveMessage' es el evento principal que usa ADIF para enviar las actualizaciones JSON
+    // 'ReceiveMessage' is the main event used by ADIF to send JSON updates
     this.hubConnection.on('ReceiveMessage', (data: any) => {
       try {
         const payload = typeof data === 'string' ? JSON.parse(data) : data;
         
-        // Bloqueo total de mensajes fantasma: si el mensaje no es para la estación actual, lo destruimos
+        // Total block of ghost messages: if the message is not for the current station, destroy it
         if (payload?.station_settings?.code) {
           const expectedCode = this.currentTopic?.replace('PRO-ECM-', '');
           if (payload.station_settings.code !== expectedCode) {
@@ -129,11 +132,14 @@ export class AdifService {
           this.trains.set(payload.trains);
         }
       } catch (e) {
-        console.error('Error parseando JSON de ADIF', e);
+        console.error('Error parsing ADIF JSON', e);
       }
     });
   }
   
+  /**
+   * Stops the active SignalR connection and resets the connected state.
+   */
   public stopConnection() {
     if (this.hubConnection) {
       this.hubConnection.stop();

@@ -18,6 +18,10 @@ import { PopularStations, Stations } from '../../constants/stations';
     IonIcon, IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonSearchbar, IonList, IonItem, IonLabel, IonContent
   ]
 })
+/**
+ * Component responsible for displaying the main departure and arrival board.
+ * Subscribes to the AdifService to reactively render train updates.
+ */
 export class BoardComponent implements OnInit, OnDestroy {
   @ViewChild('stationModal') stationModal: any;
   public allStations = Stations;
@@ -31,23 +35,23 @@ export class BoardComponent implements OnInit, OnDestroy {
     const activeKeywords = this.adif.activeFilters();
     
     let filtered = this.adif.trains().filter((t: any) => {
-      // Lógica estricta de ADIF para separar Salidas de Llegadas
+      // Strict ADIF logic to separate Departures from Arrivals
       let matchesDirection = false;
       
       if (isSalidas) {
-        // Un tren NUNCA es una salida si esta estación es su destino final o si solo admite bajada de viajeros
+        // A train is NEVER a departure if this station is its final destination or if it only allows alighting
         if (t.class_stop === 'destination' || t.class_stop === 'alighting_only') {
           matchesDirection = false;
         } else {
-          // Es salida si tiene hora de salida, o si es origen/intermedio explícitamente
+          // It is a departure if it has a departure time, or if it is explicitly origin/intermediate
           matchesDirection = !!t.departure_time || t.class_stop === 'origin' || t.class_stop === 'intermediate';
         }
       } else {
-        // Un tren NUNCA es una llegada si esta estación es su origen
+        // A train is NEVER an arrival if this station is its origin
         if (t.class_stop === 'origin') {
           matchesDirection = false;
         } else {
-          // Es llegada si tiene hora de llegada, o si es destino/intermedio/solo bajada explícitamente
+          // It is an arrival if it has an arrival time, or if it is explicitly destination/intermediate/alighting_only
           matchesDirection = !!t.arrival_time || t.class_stop === 'destination' || t.class_stop === 'intermediate' || t.class_stop === 'alighting_only';
         }
       }
@@ -66,7 +70,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       
       if (!matchesProduct) return false;
       
-      // Ocultar trenes que ya han salido (más de 1 minuto en el pasado)
+      // Hide trains that have already departed (more than 1 minute in the past)
       const timeStr = isSalidas ? (t.departure_time || t.arrival_time) : (t.arrival_time || t.departure_time);
       if (timeStr) {
         const time = new Date(timeStr).getTime();
@@ -78,7 +82,6 @@ export class BoardComponent implements OnInit, OnDestroy {
       return true;
     });
 
-    // Sort by the relevant time
     filtered.sort((a: any, b: any) => {
       const timeAStr = isSalidas ? (a.departure_time || a.arrival_time) : (a.arrival_time || a.departure_time);
       const timeBStr = isSalidas ? (b.departure_time || b.arrival_time) : (b.arrival_time || b.departure_time);
@@ -104,10 +107,19 @@ export class BoardComponent implements OnInit, OnDestroy {
     if (this.timer) clearInterval(this.timer);
   }
 
+  /**
+   * Toggles the board filter between departures ('salidas') and arrivals ('llegadas').
+   */
   toggleType() {
     this.filterType.set(this.filterType() === 'salidas' ? 'llegadas' : 'salidas');
   }
 
+  /**
+   * Determines the brand color for a given train company and product type.
+   * @param company The train operating company
+   * @param product The commercial product type of the train
+   * @returns A hex color string
+   */
   getTrainBadgeColor(company: string, product: string): string {
     const lowerCo = company?.toLowerCase() || '';
     const lowerPr = product?.toLowerCase() || '';
@@ -120,6 +132,11 @@ export class BoardComponent implements OnInit, OnDestroy {
     return '#888'; 
   }
 
+  /**
+   * Normalizes the product name for display purposes.
+   * @param product The raw product name from the API
+   * @returns The normalized product name
+   */
   getCleanProduct(product: string): string {
     if (!product) return '';
     const upper = product.toUpperCase();
@@ -142,6 +159,11 @@ export class BoardComponent implements OnInit, OnDestroy {
     return null;
   }
 
+  /**
+   * Calculates the remaining minutes until a train's departure or arrival.
+   * @param timeStr ISO 8601 time string
+   * @returns Remaining minutes
+   */
   getMinutesLeft(timeStr: string): number {
     if (!timeStr) return 999;
     const time = new Date(timeStr).getTime();
@@ -150,6 +172,11 @@ export class BoardComponent implements OnInit, OnDestroy {
     return Math.max(0, Math.round(diff));
   }
 
+  /**
+   * Extracts and normalizes the destination or origin station name for a train.
+   * @param t The train object from the API
+   * @returns The normalized station name
+   */
   getStationName(t: any): string {
     const list = this.filterType() === 'salidas' ? t.destinations : t.origins;
     if (!list || list.length === 0) return 'N/A';
@@ -159,7 +186,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     let finalName = name || code || 'N/A';
 
-    // Si ADIF manda nombre vacío, o manda el propio código numérico como nombre
+    // If ADIF sends an empty name, or sends the numeric code itself as the name
     if (!name || name.trim() === '' || /^\d+$/.test(name.trim())) {
       const targetCode = code || name;
       if (targetCode) {
@@ -170,7 +197,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     
     finalName = finalName.trim();
     
-    // Limpiar prefijos redundantes como hace la web de ADIF para que quepa mejor en pantalla
+    // Clean up redundant prefixes like the ADIF website does to fit better on screen
     if (finalName.startsWith('Madrid - ')) {
       finalName = finalName.replace('Madrid - ', '');
     }
@@ -188,7 +215,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   trackByTrain(index: number, t: any): string {
-    // ID único basado en su número de tren y destino para evitar que Angular reconstruya el DOM
+    // Unique ID based on its train number and destination to prevent Angular from rebuilding the DOM
     const trainNum = t.commercial_id?.[0]?.numbers?.[0] || '';
     const dest = t.destinations?.[0]?.code || '';
     return `${trainNum}-${dest}`;

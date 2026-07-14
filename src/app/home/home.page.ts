@@ -18,6 +18,10 @@ import { optionsOutline } from 'ionicons/icons';
     BoardComponent, ConfigPanelComponent
   ],
 })
+/**
+ * Main application page that hosts the train board and configuration panel.
+ * Adapts layout for both desktop and mobile devices.
+ */
 export class HomePage {
   public desktopPanelVisible = true;
 

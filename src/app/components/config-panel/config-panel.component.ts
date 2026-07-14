@@ -12,12 +12,16 @@ import { optionsOutline, trainOutline, filterOutline, colorPaletteOutline, sunny
   standalone: true,
   imports: [CommonModule, IonContent, IonLabel, IonChip, IonSegment, IonSegmentButton, IonIcon, IonButton, IonHeader, IonToolbar, IonTitle, IonButtons]
 })
+/**
+ * Component responsible for displaying the configuration menu.
+ * Allows users to change themes and filter train traffic types.
+ */
 export class ConfigPanelComponent implements OnInit {
 
   @Input() isDesktop: boolean = false;
   @Output() onCollapse = new EventEmitter<void>();
 
-  public currentTheme: string = 'dark'; // Dark theme is better suited for this board default
+  public currentTheme: string = 'dark';
 
   public trafficTypes = [
     { label: 'Cercanías', active: true, keywords: ['CERCANÍAS', 'CERCAN', 'CERC'] },
@@ -31,15 +35,14 @@ export class ConfigPanelComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Detectar el tema actual guardado o aplicar el oscuro por defecto
     let theme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('theme');
     
     if (!theme) {
-      theme = 'dark'; // Por defecto la app se verá en oscuro (diseño ADIF)
+      theme = 'dark';
       document.documentElement.setAttribute('data-theme', theme);
       localStorage.setItem('theme', theme);
     } else if (!document.documentElement.getAttribute('data-theme')) {
-      // Asegurar que el atributo esté en el HTML si venía de localStorage
+      // Ensure the attribute is in the HTML if it came from localStorage
       document.documentElement.setAttribute('data-theme', theme);
     }
     
@@ -50,10 +53,13 @@ export class ConfigPanelComponent implements OnInit {
     try {
       await this.menuCtrl.close('config-menu');
     } catch(e) {
-      // Ignorar
     }
   }
 
+  /**
+   * Applies a specific theme to the application and saves it to local storage.
+   * @param theme The theme name ('dark' or 'light')
+   */
   toggleTheme(theme: string) {
     this.currentTheme = theme;
     document.documentElement.setAttribute('data-theme', theme);
@@ -64,6 +70,10 @@ export class ConfigPanelComponent implements OnInit {
     this.toggleTheme(event.detail.value);
   }
 
+  /**
+   * Toggles the active state of a traffic filter and updates the global service state.
+   * @param t The traffic type object to toggle
+   */
   toggleTraffic(t: any) {
     t.active = !t.active;
     this.updateTrafficFilters();
