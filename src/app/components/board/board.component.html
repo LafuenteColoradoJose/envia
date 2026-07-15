@@ -102,7 +102,10 @@
           </ion-buttons>
         </ion-toolbar>
         <ion-toolbar color="dark">
-          <ion-searchbar placeholder="Buscar estación..." (ionInput)="filterStations($event)"></ion-searchbar>
+          <!-- WebMCP Tool Declaration para Agentic Browsing -->
+          <form toolname="search_station" tooldescription="Busca y filtra el listado de estaciones de tren disponibles por nombre o código para cambiar la estación activa.">
+            <ion-searchbar name="stationQuery" placeholder="Buscar estación..." (ionInput)="filterStations($event)" toolparamdescription="Nombre de la estación a buscar"></ion-searchbar>
+          </form>
         </ion-toolbar>
       </ion-header>
       <ion-content color="dark">
