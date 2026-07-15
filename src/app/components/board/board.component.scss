@@ -169,7 +169,7 @@
     }
     .abs-time {
       font-size: 0.85rem;
-      color: #6a82a0;
+      color: #a8bdcf; /* Mejor contraste WCAG */
       margin-top: 2px;
       &.only-abs {
         font-size: 1.4rem;
@@ -268,21 +268,21 @@
     }
   }
 
-  .col-train {
+  .train-row .col-train {
     font-size: 1.1rem;
     font-weight: 700;
     color: #ffffff;
     text-align: center;
   }
 
-  .col-acc {
+  .train-row .col-acc {
     font-size: 1rem;
     font-weight: 700;
     color: #ffffff;
     text-align: center;
   }
 
-  .col-plat {
+  .train-row .col-plat {
     font-size: 1.5rem;
     font-weight: 900;
     color: #ffffff;

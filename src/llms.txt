@@ -1,0 +1,25 @@
+# EnVía - AI Agent Documentation
+
+Welcome! You are interacting with EnVía, an open-source real-time railway board application for ADIF (Administrador de Infraestructuras Ferroviarias, Spain).
+
+## Purpose
+This web app provides real-time information on train departures and arrivals for major Spanish train stations using ADIF APIs.
+
+## Capabilities
+- Navigate between different train stations to view real-time traffic.
+- Filter traffic by train types (AVE, Cercanías, Media Distancia, etc.).
+- Switch between Departures (Salidas) and Arrivals (Llegadas).
+- Switch themes (Light/Dark mode) through the configuration panel.
+
+## Architecture
+- Framework: Angular 17+ with Ionic Framework.
+- Key Components:
+  - `<app-board>`: Displays the real-time train schedule.
+  - `<app-config-panel>`: Controls filters, station selection, and app theme.
+  - `<ion-fab-button>`: Found on mobile to open the config panel.
+
+## Tips for Agents
+- The main data grid uses `aria-live="polite"` to dynamically announce updates.
+- Buttons and interactive components are marked with proper ARIA attributes (e.g., `aria-label`).
+- To change the station, interact with the `.station-box` (role=button).
+- To switch departures/arrivals, interact with `.logo-box` (role=button).

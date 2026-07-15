@@ -1,17 +1,17 @@
 <ion-header mode="md" class="ion-no-border">
   <ion-toolbar>
     <ion-title style="font-weight: 800; font-size: 1.2rem; letter-spacing: -0.5px; padding-inline: 24px;">
-      <ion-icon name="options-outline" style="vertical-align: text-bottom; margin-right: 8px; color: var(--ion-color-primary);"></ion-icon>
+      <ion-icon name="options-outline" aria-hidden="true" style="vertical-align: text-bottom; margin-right: 8px; color: var(--ion-color-primary);"></ion-icon>
       Configuración
     </ion-title>
     <ion-buttons slot="end">
       @if (!isDesktop) {
-        <ion-button (click)="closeModal()" color="medium" style="margin-right: 16px;">
+        <ion-button (click)="closeModal()" aria-label="Cerrar configuración" style="margin-right: 16px; --color: var(--ion-text-color);">
           <ion-icon name="close-circle" slot="icon-only" style="font-size: 1.8rem;"></ion-icon>
         </ion-button>
       }
       @if (isDesktop) {
-        <ion-button (click)="onCollapse.emit()" color="medium" style="margin-right: 16px;" title="Ocultar panel">
+        <ion-button (click)="onCollapse.emit()" aria-label="Ocultar panel de configuración" style="margin-right: 16px; --color: var(--ion-text-color);" title="Ocultar panel">
           <ion-icon name="chevron-back-outline" slot="icon-only" style="font-size: 1.8rem;"></ion-icon>
         </ion-button>
       }
@@ -24,11 +24,11 @@
     <!-- Traffic Filters -->
     <div class="config-card">
       <div class="card-header">
-        <ion-icon name="filter-outline"></ion-icon>
+        <ion-icon name="filter-outline" aria-hidden="true"></ion-icon>
         <h3>Filtros de Tráfico</h3>
       </div>
       <div class="chip-container">
-        <ion-chip *ngFor="let t of trafficTypes" (click)="toggleTraffic(t)" [ngClass]="t.active ? 'chip-active' : 'chip-inactive'" mode="ios" class="custom-chip">
+        <ion-chip *ngFor="let t of trafficTypes" role="switch" [attr.aria-checked]="t.active" tabindex="0" (click)="toggleTraffic(t)" (keydown.enter)="toggleTraffic(t)" [ngClass]="t.active ? 'chip-active' : 'chip-inactive'" mode="ios" class="custom-chip">
           <ion-label>{{ t.label }}</ion-label>
         </ion-chip>
       </div>
@@ -37,7 +37,7 @@
     <!-- Theme Selection -->
     <div class="config-card">
       <div class="card-header">
-        <ion-icon name="color-palette-outline"></ion-icon>
+        <ion-icon name="color-palette-outline" aria-hidden="true"></ion-icon>
         <h3>Tema Visual</h3>
       </div>
       <ion-segment [value]="currentTheme" (ionChange)="themeChanged($event)" color="primary" mode="ios" class="theme-segment">
@@ -59,13 +59,13 @@
         <h2>José Lafuente</h2>
       </div>
       <div class="social-links">
-        <ion-button fill="clear" href="https://www.joselafuente.dev" target="_blank" color="medium">
+        <ion-button fill="clear" aria-label="Visitar sitio web del autor" href="https://www.joselafuente.dev" target="_blank">
           <ion-icon name="globe-outline" slot="icon-only"></ion-icon>
         </ion-button>
-        <ion-button fill="clear" href="https://github.com/LafuenteColoradoJose" target="_blank" color="medium">
+        <ion-button fill="clear" aria-label="Visitar GitHub del autor" href="https://github.com/LafuenteColoradoJose" target="_blank">
           <ion-icon name="logo-github" slot="icon-only"></ion-icon>
         </ion-button>
-        <ion-button fill="clear" href="https://www.linkedin.com/in/joselafuentecolorado/" target="_blank" color="medium">
+        <ion-button fill="clear" aria-label="Visitar LinkedIn del autor" href="https://www.linkedin.com/in/joselafuentecolorado/" target="_blank">
           <ion-icon name="logo-linkedin" slot="icon-only"></ion-icon>
         </ion-button>
       </div>

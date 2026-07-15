@@ -24,8 +24,8 @@
   <!-- Botón flotante para abrir controles en móvil -->
   <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="mobile-fab">
     <ion-menu-toggle menu="config-menu">
-      <ion-fab-button color="primary">
-        <ion-icon name="options-outline"></ion-icon>
+      <ion-fab-button color="primary" aria-label="Abrir panel de configuración">
+        <ion-icon name="options-outline" aria-hidden="true"></ion-icon>
       </ion-fab-button>
     </ion-menu-toggle>
   </ion-fab>
@@ -33,8 +33,8 @@
   <!-- Botón flotante para restaurar controles en escritorio -->
   @if (!desktopPanelVisible) {
     <ion-fab slot="fixed" vertical="bottom" horizontal="start" class="desktop-fab" style="margin-left: 16px;">
-      <ion-fab-button color="primary" (click)="desktopPanelVisible = true" title="Mostrar opciones">
-        <ion-icon name="options-outline"></ion-icon>
+      <ion-fab-button color="primary" (click)="desktopPanelVisible = true" title="Mostrar opciones" aria-label="Mostrar panel de opciones">
+        <ion-icon name="options-outline" aria-hidden="true"></ion-icon>
       </ion-fab-button>
     </ion-fab>
   }

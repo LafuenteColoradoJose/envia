@@ -73,13 +73,13 @@
   text-align: center;
   background: rgba(var(--ion-text-color-rgb), 0.05);
   border-radius: 8px;
-  border: 1px solid rgba(var(--ion-text-color-rgb), 0.1);
+  border: 1px solid rgba(var(--ion-text-color-rgb), 0.15);
   
   p {
     margin: 0;
-    font-size: 0.7rem;
-    color: var(--ion-color-medium);
-    line-height: 1.4;
+    font-size: 0.75rem;
+    color: rgba(var(--ion-text-color-rgb), 0.85);
+    line-height: 1.5;
   }
 }
 
@@ -123,13 +123,15 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
+  background: rgba(var(--ion-color-primary-rgb), 0.08);
+  border: 1px solid rgba(var(--ion-color-primary-rgb), 0.2);
   
   .author-info {
     h4 {
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: var(--ion-color-medium);
+      color: rgba(var(--ion-text-color-rgb), 0.75);
       margin: 0 0 4px 0;
       font-weight: 700;
     }
@@ -148,6 +150,7 @@
     ion-button {
       --padding-start: 8px;
       --padding-end: 8px;
+      --color: var(--ion-text-color);
       margin: 0;
       height: 36px;
       
@@ -156,7 +159,7 @@
       }
       
       &:hover {
-        color: var(--ion-color-primary);
+        --color: var(--ion-color-primary);
       }
     }
   }

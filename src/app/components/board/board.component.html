@@ -2,7 +2,7 @@
   <!-- HEADER -->
   <div class="board-header">
     <div class="header-top">
-      <div class="logo-box" (click)="toggleType()" style="cursor: pointer;" title="Cambiar a Salidas/Llegadas">
+      <div class="logo-box" role="button" tabindex="0" (click)="toggleType()" (keydown.enter)="toggleType()" aria-label="Alternar entre Salidas y Llegadas" style="cursor: pointer;" title="Cambiar a Salidas/Llegadas">
         <div class="adif-logo">
           <img src="assets/logo.png" alt="EnVía Logo" style="width: 20px; height: 20px; margin-right: 6px; border-radius: 4px;" />
           EnVía
@@ -10,12 +10,12 @@
         <div class="title-container">
           <h1 class="type-title">
             {{ filterType() === 'salidas' ? 'Salidas' : 'Llegadas' }}
-            <ion-icon name="swap-vertical-outline" class="swap-icon"></ion-icon>
+            <ion-icon name="swap-vertical-outline" class="swap-icon" aria-hidden="true"></ion-icon>
           </h1>
         </div>
       </div>
-      <div class="station-box" (click)="openStationModal()" style="cursor: pointer;" title="Cambiar Estación">
-        <div class="station-label">Estación de <ion-icon name="create-outline" style="vertical-align: text-bottom;"></ion-icon></div>
+      <div class="station-box" role="button" tabindex="0" (click)="openStationModal()" (keydown.enter)="openStationModal()" aria-label="Cambiar Estación" style="cursor: pointer;" title="Cambiar Estación">
+        <div class="station-label">Estación de <ion-icon name="create-outline" aria-hidden="true" style="vertical-align: text-bottom;"></ion-icon></div>
         <div class="station-name">{{ adif.stationName() }}</div>
       </div>
       <div class="time-box">
@@ -33,7 +33,7 @@
   </div>
 
   <!-- BODY -->
-  <div class="board-body">
+  <div class="board-body" aria-live="polite" aria-atomic="true">
     <div class="train-row" *ngFor="let t of visibleTrains(); trackBy: trackByTrain">
       <!-- Time left -->
       <div class="col-time">
@@ -57,7 +57,9 @@
       <div class="col-info">
         <!-- Operator -->
         <div class="col-op">
-          <div class="op-badge" [style.background-color]="getTrainBadgeColor(t.company, t.commercial_id?.[0]?.product || '')">
+          <div class="op-badge" 
+               [style.background-color]="getTrainBadgeColor(t.company, t.commercial_id?.[0]?.product || '')"
+               [style.color]="getTrainBadgeTextColor(getTrainBadgeColor(t.company, t.commercial_id?.[0]?.product || ''))">
             <span class="co">{{ t.company | lowercase }}</span>
             <span class="prod" *ngIf="t.commercial_id?.[0]?.product">{{ getCleanProduct(t.commercial_id?.[0]?.product) }}</span>
           </div>

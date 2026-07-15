@@ -115,6 +115,16 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Determines the accessible text color (black or white) based on the badge background.
+   * @param bgColor The hex background color
+   * @returns '#000000' for light backgrounds, '#ffffff' for dark ones
+   */
+  getTrainBadgeTextColor(bgColor: string): string {
+    const lightColors = ['#f37021', '#00d2ff', '#888'];
+    return lightColors.includes(bgColor) ? '#000000' : '#ffffff';
+  }
+
+  /**
    * Determines the brand color for a given train company and product type.
    * @param company The train operating company
    * @param product The commercial product type of the train
@@ -125,7 +135,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     const lowerPr = product?.toLowerCase() || '';
     if (lowerPr.includes('ave') || lowerCo.includes('ave')) return '#7e2d68'; 
     if (lowerPr.includes('alvia') || lowerCo.includes('alvia')) return '#7e2d68'; 
-    if (lowerPr.includes('cercanías') || lowerCo.includes('cercanías') || lowerPr.includes('cer') || lowerPr.includes('rod')) return '#e4002b'; 
+    // Utilizamos #cc0026 en lugar del #e4002b original de Cercanías para asegurar un contraste WCAG AA > 4.5:1 con texto blanco
+    if (lowerPr.includes('cercanías') || lowerCo.includes('cercanías') || lowerPr.includes('cer') || lowerPr.includes('rod')) return '#cc0026'; 
     if (lowerPr.includes('avant')) return '#f37021'; 
     if (lowerCo.includes('iryo')) return '#da251d'; 
     if (lowerCo.includes('ouigo')) return '#00d2ff'; 
