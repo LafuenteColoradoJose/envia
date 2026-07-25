@@ -24,6 +24,7 @@ import { PopularStations, Stations } from '../../constants/stations';
  */
 export class BoardComponent implements OnInit, OnDestroy {
   @ViewChild('stationModal') stationModal: any;
+  @ViewChild(IonSearchbar) searchbar!: IonSearchbar;
   public allStations = Stations;
   public filteredStations = PopularStations;
   public filterType = signal<'salidas' | 'llegadas'>('salidas');
@@ -235,6 +236,12 @@ export class BoardComponent implements OnInit, OnDestroy {
   openStationModal() {
     this.filteredStations = [...PopularStations];
     this.stationModal?.present();
+  }
+
+  focusSearchbar() {
+    if (this.searchbar) {
+      setTimeout(() => this.searchbar.setFocus(), 150);
+    }
   }
 
   closeStationModal() {

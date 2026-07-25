@@ -92,7 +92,7 @@
   </div>
 
   <!-- Modal Selector de Estación -->
-  <ion-modal #stationModal>
+  <ion-modal #stationModal (didPresent)="focusSearchbar()">
     <ng-template>
       <ion-header>
         <ion-toolbar>
