@@ -95,20 +95,20 @@
   <ion-modal #stationModal>
     <ng-template>
       <ion-header>
-        <ion-toolbar color="dark">
+        <ion-toolbar>
           <ion-title>Elegir Estación</ion-title>
           <ion-buttons slot="end">
             <ion-button (click)="closeStationModal()">Cerrar</ion-button>
           </ion-buttons>
         </ion-toolbar>
-        <ion-toolbar color="dark">
+        <ion-toolbar>
           <!-- WebMCP Tool Declaration para Agentic Browsing -->
           <form toolname="search_station" tooldescription="Busca y filtra el listado de estaciones de tren disponibles por nombre o código para cambiar la estación activa.">
             <ion-searchbar name="stationQuery" placeholder="Buscar estación..." (ionInput)="filterStations($event)" toolparamdescription="Nombre de la estación a buscar"></ion-searchbar>
           </form>
         </ion-toolbar>
       </ion-header>
-      <ion-content color="dark">
+      <ion-content>
         <ion-list>
           <ion-item *ngFor="let s of filteredStations" button (click)="changeStation(s.code)">
             <ion-label>{{ s.name }}</ion-label>

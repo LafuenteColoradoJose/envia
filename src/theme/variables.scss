@@ -46,3 +46,12 @@ body {
   background: var(--ion-background-color);
   color: var(--ion-text-color);
 }
+
+// Asegurar que el buscador se adapta al tema global
+ion-searchbar {
+  --color: var(--ion-text-color) !important;
+  --placeholder-color: var(--ion-color-medium) !important;
+  --icon-color: var(--ion-color-medium) !important;
+  --clear-button-color: var(--ion-text-color) !important;
+  --background: var(--ion-item-background) !important;
+}
