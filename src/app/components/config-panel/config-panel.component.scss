@@ -71,14 +71,15 @@
   margin-top: 24px;
   padding: 12px;
   text-align: center;
-  background: rgba(var(--ion-text-color-rgb), 0.05);
+  background: var(--ion-color-step-50);
   border-radius: 8px;
-  border: 1px solid rgba(var(--ion-text-color-rgb), 0.15);
+  border: 1px solid var(--ion-color-medium);
+  opacity: 0.85;
   
   p {
     margin: 0;
     font-size: 0.75rem;
-    color: rgba(var(--ion-text-color-rgb), 0.85);
+    color: var(--ion-text-color);
     line-height: 1.5;
   }
 }
@@ -131,7 +132,7 @@
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: rgba(var(--ion-text-color-rgb), 0.75);
+      color: var(--ion-color-medium);
       margin: 0 0 4px 0;
       font-weight: 700;
     }
