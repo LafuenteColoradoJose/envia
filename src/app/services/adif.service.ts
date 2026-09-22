@@ -89,7 +89,7 @@ export class AdifService {
 
       this.currentTopic = newTopic;
       this.trains.set([]);
-      this.stationName.set('Cargando...');
+      this.stationName.set(this.stationDictionary[stationCode] || 'Cargando...');
 
       // ADIF requires joining the 'Topic' (station code with PRO-ECM- prefix)
       // and explicitly request the last message to paint the initial screen.
