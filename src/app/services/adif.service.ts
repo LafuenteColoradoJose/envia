@@ -40,19 +40,33 @@ export class AdifService {
     this.isConnecting = true;
 
     try {
+      const newTopic = `PRO-ECM-${stationCode}`;
+
+      if (this.currentTopic === newTopic) {
+        return;
+      }
+
+      // ADIF has removed the 'LeaveInfo' method from their server.
+      // To avoid receiving ghost messages from previous stations and bandwidth bloat,
+      // we completely stop and destroy the connection when changing stations.
+      if (this.hubConnection && this.currentTopic) {
+        await this.hubConnection.stop();
+        this.hubConnection = undefined;
+      }
+
+      // Recreate connection if it was destroyed or didn't exist
       if (!this.hubConnection) {
         this.hubConnection = new signalR.HubConnectionBuilder()
           .withUrl('https://info.adif.es/InfoStation', {
             skipNegotiation: true,
             transport: signalR.HttpTransportType.WebSockets
-          }) // Skip HTTP negotiation to avoid CORS and force pure WebSockets
+          })
           .withAutomaticReconnect()
           .build();
 
         this.registerEvents();
 
         this.hubConnection.onreconnected(async () => {
-
           if (this.currentTopic) {
             try {
               await this.hubConnection?.invoke('JoinInfo', this.currentTopic);
@@ -65,27 +79,11 @@ export class AdifService {
 
         try {
           await this.hubConnection.start();
-
           this.connected.set(true);
         } catch (err) {
           console.error('❌ Error connecting to ADIF SignalR:', err);
           this.connected.set(false);
           return;
-        }
-      }
-
-      const newTopic = `PRO-ECM-${stationCode}`;
-
-      if (this.currentTopic === newTopic) {
-        return;
-      }
-
-      if (this.currentTopic) {
-        try {
-          await this.hubConnection.invoke('LeaveInfo', this.currentTopic);
-
-        } catch (e) {
-          console.error('Error leaving topic', e);
         }
       }
 
