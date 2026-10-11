@@ -10,9 +10,10 @@ describe('AdifService', () => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(AdifService);
     
-    hubConnectionSpy = jasmine.createSpyObj('HubConnection', ['start', 'on', 'invoke']);
+    hubConnectionSpy = jasmine.createSpyObj('HubConnection', ['start', 'on', 'invoke', 'onreconnected']);
     hubConnectionSpy.start.and.returnValue(Promise.resolve());
     hubConnectionSpy.invoke.and.returnValue(Promise.resolve());
+    hubConnectionSpy.onreconnected.and.callFake((callback: any) => callback());
     
     spyOn(signalR.HubConnectionBuilder.prototype, 'build').and.returnValue(hubConnectionSpy);
     spyOn(signalR.HubConnectionBuilder.prototype, 'withUrl').and.callThrough();

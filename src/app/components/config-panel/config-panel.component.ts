@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonContent, IonLabel, IonChip, IonSegment, IonSegmentButton, IonIcon, IonButton, MenuController, IonHeader, IonToolbar, IonTitle, IonButtons } from '@ionic/angular/standalone';
 import { AdifService } from '../../services/adif.service';
@@ -19,7 +19,7 @@ import { optionsOutline, trainOutline, filterOutline, colorPaletteOutline, sunny
 export class ConfigPanelComponent implements OnInit {
 
   @Input() isDesktop: boolean = false;
-  @Output() onCollapse = new EventEmitter<void>();
+  @Output() collapse = new EventEmitter<void>();
 
   public currentTheme: string = 'dark';
 
@@ -30,7 +30,10 @@ export class ConfigPanelComponent implements OnInit {
     { label: 'Regional / MD', active: true, keywords: ['REGIONAL', 'MD'] }
   ];
 
-  constructor(public adif: AdifService, private menuCtrl: MenuController) { 
+  private readonly adif = inject(AdifService);
+  private readonly menuCtrl = inject(MenuController);
+
+  constructor() { 
     addIcons({ optionsOutline, trainOutline, filterOutline, colorPaletteOutline, sunnyOutline, moonOutline, checkmarkCircle, closeCircle, globeOutline, logoGithub, logoLinkedin, chevronBackOutline });
   }
 

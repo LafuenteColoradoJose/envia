@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy, computed, signal, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, computed, signal, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { 
   IonIcon, IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonSearchbar, IonList, IonItem, IonLabel, IonContent
 } from '@ionic/angular/standalone';
 import { AdifService } from '../../services/adif.service';
 import { addIcons } from 'ionicons';
-import { swapVerticalOutline, createOutline, train } from 'ionicons/icons';
+import { swapVerticalOutline, createOutline, train, refreshOutline, warningOutline } from 'ionicons/icons';
 import { PopularStations, Stations } from '../../constants/stations';
 
 @Component({
@@ -15,7 +15,8 @@ import { PopularStations, Stations } from '../../constants/stations';
   standalone: true,
   imports: [
     CommonModule,
-    IonIcon, IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonSearchbar, IonList, IonItem, IonLabel, IonContent
+    IonIcon, IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonSearchbar, IonList, IonItem, IonLabel, IonContent,
+    
   ]
 })
 /**
@@ -30,15 +31,25 @@ export class BoardComponent implements OnInit, OnDestroy {
   public filterType = signal<'salidas' | 'llegadas'>('salidas');
   public currentTime = signal<Date>(new Date());
   private timer: any;
-  
+
+  // Track if initial load has completed (for spinner UX)
+  private hasLoadedOnce = false;
+
+  public readonly adif = inject(AdifService);
+
   public visibleTrains = computed(() => {
     const isSalidas = this.filterType() === 'salidas';
     const activeKeywords = this.adif.activeFilters();
-    
+
+    // Mark as loaded once we have data
+    if (this.adif.trains().length > 0 && !this.hasLoadedOnce) {
+      this.hasLoadedOnce = true;
+    }
+
     let filtered = this.adif.trains().filter((t: any) => {
       // Strict ADIF logic to separate Departures from Arrivals
       let matchesDirection = false;
-      
+
       if (isSalidas) {
         // A train is NEVER a departure if this station is its final destination or if it only allows alighting
         if (t.class_stop === 'destination' || t.class_stop === 'alighting_only') {
@@ -56,21 +67,21 @@ export class BoardComponent implements OnInit, OnDestroy {
           matchesDirection = !!t.arrival_time || t.class_stop === 'destination' || t.class_stop === 'intermediate' || t.class_stop === 'alighting_only';
         }
       }
-        
+
       if (!matchesDirection) return false;
-      
+
       const product = t.commercial_id?.[0]?.product?.toUpperCase() || '';
       if (!product || product === 'TREN') return true;
-      
+
       let matchesProduct = activeKeywords.some((keyword: string) => {
         if (keyword === 'CERCANÍAS') {
           return product.includes('CERCANÍAS') || product.includes('CERMAD') || product.includes('CER') || product.includes('ROD');
         }
         return product.includes(keyword);
       });
-      
+
       if (!matchesProduct) return false;
-      
+
       // Hide trains that have already departed (more than 1 minute in the past)
       const timeStr = isSalidas ? (t.departure_time || t.arrival_time) : (t.arrival_time || t.departure_time);
       if (timeStr) {
@@ -79,7 +90,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         const diff = (time - now) / 60000;
         if (diff < -1) return false;
       }
-      
+
       return true;
     });
 
@@ -94,8 +105,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     return filtered;
   });
 
-  constructor(public adif: AdifService) { 
-    addIcons({ swapVerticalOutline, createOutline, train });
+  constructor() {
+    addIcons({ swapVerticalOutline, createOutline, train, refreshOutline, warningOutline });
   }
 
   ngOnInit() {
@@ -134,14 +145,14 @@ export class BoardComponent implements OnInit, OnDestroy {
   getTrainBadgeColor(company: string, product: string): string {
     const lowerCo = company?.toLowerCase() || '';
     const lowerPr = product?.toLowerCase() || '';
-    if (lowerPr.includes('ave') || lowerCo.includes('ave')) return '#7e2d68'; 
-    if (lowerPr.includes('alvia') || lowerCo.includes('alvia')) return '#7e2d68'; 
+    if (lowerPr.includes('ave') || lowerCo.includes('ave')) return '#7e2d68';
+    if (lowerPr.includes('alvia') || lowerCo.includes('alvia')) return '#7e2d68';
     // Utilizamos #cc0026 en lugar del #e4002b original de Cercanías para asegurar un contraste WCAG AA > 4.5:1 con texto blanco
-    if (lowerPr.includes('cercanías') || lowerCo.includes('cercanías') || lowerPr.includes('cer') || lowerPr.includes('rod')) return '#cc0026'; 
-    if (lowerPr.includes('avant')) return '#f37021'; 
-    if (lowerCo.includes('iryo')) return '#da251d'; 
-    if (lowerCo.includes('ouigo')) return '#00d2ff'; 
-    return '#888'; 
+    if (lowerPr.includes('cercanías') || lowerCo.includes('cercanías') || lowerPr.includes('cer') || lowerPr.includes('rod')) return '#cc0026';
+    if (lowerPr.includes('avant')) return '#f37021';
+    if (lowerCo.includes('iryo')) return '#da251d';
+    if (lowerCo.includes('ouigo')) return '#00d2ff';
+    return '#888';
   }
 
   /**
@@ -192,7 +203,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   getStationName(t: any): string {
     const list = this.filterType() === 'salidas' ? t.destinations : t.origins;
     if (!list || list.length === 0) return 'N/A';
-    
+
     const name = list[0].name;
     const code = list[0].code;
 
@@ -206,9 +217,9 @@ export class BoardComponent implements OnInit, OnDestroy {
         finalName = this.adif.stationDictionary[paddedCode] || targetCode;
       }
     }
-    
+
     finalName = finalName.trim();
-    
+
     // Clean up redundant prefixes like the ADIF website does to fit better on screen
     if (finalName.startsWith('Madrid - ')) {
       finalName = finalName.replace('Madrid - ', '');
@@ -222,7 +233,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     if (finalName === 'Príncipe Pío') finalName = 'Príncipe Pío'; // just in case
     if (finalName === 'Alcob.Sseb') finalName = 'Alcobendas-S.S. Reyes';
     if (finalName === 'San Fernando De Henares') finalName = 'San Fernando Henares';
-    
+
     return finalName;
   }
 

@@ -5,19 +5,19 @@
 <ion-content id="main-content" [fullscreen]="true">
   <ion-grid class="ion-no-padding" style="height: 100%;">
     <ion-row style="height: 100%;">
-      
+
       <!-- Panel de configuración (solo en escritorio) -->
       @if (desktopPanelVisible) {
         <ion-col size="12" size-lg="3" class="desktop-panel">
-          <app-config-panel [isDesktop]="true" (onCollapse)="desktopPanelVisible = false"></app-config-panel>
+          <app-config-panel [isDesktop]="true" (collapse)="desktopPanelVisible = false"></app-config-panel>
         </ion-col>
       }
-      
+
       <!-- Panel principal con la lista de trenes -->
       <ion-col size="12" [sizeLg]="desktopPanelVisible ? '9' : '12'" class="main-panel">
         <app-board></app-board>
       </ion-col>
-      
+
     </ion-row>
   </ion-grid>
 
